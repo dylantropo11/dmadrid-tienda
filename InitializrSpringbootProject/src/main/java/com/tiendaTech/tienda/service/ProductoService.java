@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProductoService {
-    
+
     private final ProductoRepository productoRepository;
     private final FirebaseStorageService firebaseStorageService;
 
@@ -23,7 +23,7 @@ public class ProductoService {
 
     @Transactional(readOnly = true)
     public List<Producto> getProductos(boolean activo) {
-        if (activo) {       
+        if (activo) {
             return productoRepository.findByActivoTrue();
         }
         return productoRepository.findAll();
@@ -37,7 +37,7 @@ public class ProductoService {
     @Transactional
     public void save(Producto producto, MultipartFile imagenFile) {
         producto = productoRepository.save(producto);
-        if (!imagenFile.isEmpty()) {            
+        if (!imagenFile.isEmpty()) {
             try {
                 String rutaImagen = firebaseStorageService.uploadImage(
                         imagenFile, "producto",
@@ -64,7 +64,7 @@ public class ProductoService {
             throw new IllegalStateException("No se puede eliminar la producto. Tiene datos asociados.", e);
         }
     }
-    
+
     @Transactional(readOnly = true)
     public List<Producto> consultaDerivada(double precioInf, double precioSup) {
         return productoRepository.findByPrecioBetweenOrderByPrecioAsc(precioInf, precioSup);
@@ -79,6 +79,9 @@ public class ProductoService {
     public List<Producto> consultaSQL(double precioInf, double precioSup) {
         return productoRepository.consultaSQL(precioInf, precioSup);
     }
-}
-    
 
+    @Transactional(readOnly = true)
+    public List<Producto> consultaPorCategoriaYTope(String nombreCategoria, Double precioTope) {
+        return productoRepository.consultaPorCategoriaYTope(nombreCategoria, precioTope);
+    }
+}

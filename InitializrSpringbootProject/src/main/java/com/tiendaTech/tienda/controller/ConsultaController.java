@@ -57,4 +57,13 @@ public class ConsultaController {
         return "/consultas/listado";
     }
 
+    @PostMapping("/consultaCategoria")
+    public String consultaCategoria(@RequestParam() String nombreCategoria,
+            @RequestParam(required = false) Double precioTope, Model model) {
+        var lista = productoService.consultaPorCategoriaYTope(nombreCategoria, precioTope);
+        model.addAttribute("productos", lista);
+        model.addAttribute("nombreCategoria", nombreCategoria);
+        model.addAttribute("precioTope", precioTope);
+        return "/consultas/listado";
+    }
 }
